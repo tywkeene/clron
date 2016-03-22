@@ -24,12 +24,12 @@
 (defun run-job (job)
   (sb-ext:run-program (getf job :script-path) nil :wait t :output t))
 
-(defun run-jobs (job-list)
-  (dolist (job job-list)
+(defun run-jobs ()
+  (dolist (job *jobs*)
     (run-job job)))
 
-(defun main ()
+(defun run ()
   (parse-jobs-file)
-  (let ((job-list *jobs*))
-    (run-jobs job-list)))
-(main)
+  (run-jobs))
+(run)
+
