@@ -1,5 +1,5 @@
-./script.sh 30
-./script.sh 30
-./script.sh 30
-./script.sh 30
+./script.sh 5 
+./script.sh 10
+./script.sh 15 
+./script.sh 20
 ./script.sh 30

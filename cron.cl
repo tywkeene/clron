@@ -1,12 +1,12 @@
 (load "/home/savior/quicklisp/setup.lisp")
 (ql:quickload "split-sequence")
 
-
+(defvar *timers* nil)
 (defvar *jobs* nil)
 (defvar *jobs-file* "./jobs.list")
 
 (defun make-job (script-path interval)
-  (list :script-path script-path :interval interval))
+  (list script-path interval))
 
 (defun add-job (job) (push job *jobs*))
 
@@ -22,14 +22,25 @@
                        (cdr (split-sequence:SPLIT-SEQUENCE #\space job))))))
 
 (defun run-job (job)
-  (sb-ext:run-program (getf job :script-path) nil :wait t :output t))
+  (sb-ext:run-program (car job) nil :wait t :output t))
 
-(defun run-jobs ()
+(defun get-timer-interval (job)
+  (parse-integer (car(car(cdr job)))))
+
+(defun add-job-timer (timer)
+  (push timer *timers*))
+
+(defun make-job-timer (job)
+    (add-job-timer (schedule-timer (make-timer (lambda ()(run-job job))) (get-timer-interval job))))
+
+(defun add-job-timer (timer) (push timer *timers*))
+
+(defun init-jobs ()
   (dolist (job *jobs*)
-    (run-job job)))
+    (add-job-timer (make-job-timer job))))
 
 (defun run ()
   (parse-jobs-file)
-  (run-jobs))
+  (init-jobs)
+  (sleep 60))
 (run)
-
