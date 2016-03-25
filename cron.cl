@@ -27,9 +27,6 @@
 (defun get-timer-interval (job)
   (parse-integer (car(car(cdr job)))))
 
-(defun add-job-timer (timer)
-  (push timer *timers*))
-
 (defun make-job-timer (job)
     (add-job-timer (schedule-timer (make-timer (lambda ()(run-job job))) (get-timer-interval job))))
 
@@ -38,9 +35,3 @@
 (defun init-jobs ()
   (dolist (job *jobs*)
     (add-job-timer (make-job-timer job))))
-
-(defun run ()
-  (parse-jobs-file)
-  (init-jobs)
-  (sleep 60))
-(run)
